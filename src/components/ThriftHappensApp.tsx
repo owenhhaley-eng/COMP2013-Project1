@@ -19,3 +19,30 @@ export interface ItemsContainerProps {
   data: ClothingProduct[];
   productInfo: ProductInfo[];
 }
+
+/// I'll need a CheckoutItem interface later on
+
+///////////////////Thrift Happens App function
+
+export default function ThriftHappensApp({ data }: ItemData) {
+  //states
+  //ProductInfo state that stores the quantity and ItemQuantity chosen by the user
+  const [productInfo, setProductInfo] = useState<ProductInfo[]>(
+    data.map((item: ClothingProduct) => ({
+      id: item.id,
+      quantity: item.quantity,
+      itemQuantity: item.itemQuantity,
+    })),
+  );
+
+  ///Checkout Items state
+
+  ///Handlers
+
+  return (
+    <div>
+      <ItemsContainer data={data} productInfo={productInfo} />
+      <CheckoutContainer />
+    </div>
+  );
+}

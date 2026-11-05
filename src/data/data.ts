@@ -679,3 +679,5 @@ export const products: ClothingProduct[] = [
     itemQuantity: 0,
   },
 ];
+
+export default products;
