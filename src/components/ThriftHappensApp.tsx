@@ -18,9 +18,19 @@ export interface ProductInfo {
 export interface ItemsContainerProps {
   data: ClothingProduct[];
   productInfo: ProductInfo[];
+  handleChangeQuantity: (id: number, delta: number) => void;
 }
 
 /// I'll need a CheckoutItem interface later on
+
+export interface CheckoutItem {
+  id: string;
+  image: string;
+  title: string;
+  price: number;
+  itemQuantity: number;
+  total: number;
+}
 
 ///////////////////Thrift Happens App function
 
@@ -36,13 +46,37 @@ export default function ThriftHappensApp({ data }: ItemData) {
   );
 
   ///Checkout Items state
+  const [checkoutItems, setCheckoutItems] = useState<CheckoutItem[]>([]);
 
   ///Handlers
+  function handleChangeQuantity(id: number, delta: number) {
+    setProductInfo((prevData) => {
+      return prevData.map((info) =>
+        info.id === id
+          ? { ...info, itemQuantity: Math.max(info.itemQuantity + delta, 0) }
+          : info,
+      );
+    });
+  }
 
+  function handleRemoveOneFromCheckout(id: string) {
+    setCheckoutItems((prevItems) => {
+      return prevItems.filter((item) => item.id !== id);
+    });
+  }
+
+  //Main return
   return (
     <div>
-      <ItemsContainer data={data} productInfo={productInfo} />
-      <CheckoutContainer />
+      <ItemsContainer
+        data={data}
+        productInfo={productInfo}
+        handleChangeQuantity={handleChangeQuantity}
+      />
+      <CheckoutContainer
+        checkoutData={checkoutItems}
+        handleRemoveOneFromCheckout={handleRemoveOneFromCheckout}
+      />
     </div>
   );
 }

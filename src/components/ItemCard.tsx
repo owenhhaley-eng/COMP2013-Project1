@@ -3,6 +3,7 @@ import type { ProductInfo } from "./ThriftHappensApp";
 
 interface ProductCardProps extends ClothingProduct {
   productInfo: ProductInfo;
+  handleChangeQuantity: (delta: number) => void;
 }
 
 export default function ProductCard({
@@ -15,6 +16,7 @@ export default function ProductCard({
   description,
   size,
   price,
+  handleChangeQuantity,
 }: ProductCardProps) {
   return (
     <div className="ProductCard">
@@ -27,9 +29,10 @@ export default function ProductCard({
       <p>Size: {size}</p>
       <p>Price: {price}</p>
       <p>Quantity: {productInfo.quantity}</p>
-      <button>{" - "}</button>
+      <button onClick={() => handleChangeQuantity(-1)}>{" - "}</button>
       <span>{productInfo.itemQuantity}</span>
-      <button>{" + "}</button>
+      <button onClick={() => handleChangeQuantity(1)}>{" + "}</button>
+      <br />
       <button>Add to Checkout</button>
     </div>
   );
