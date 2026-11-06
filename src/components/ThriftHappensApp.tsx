@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ClothingProduct } from "../data/data";
+import NavBar from "./NavBar";
 import ItemsContainer from "./ItemsContainer";
 import CheckoutContainer from "./CheckoutContainer";
 
@@ -68,6 +69,7 @@ export default function ThriftHappensApp({ data }: ItemData) {
   //Main return
   return (
     <div>
+      <NavBar />
       <ItemsContainer
         data={data}
         productInfo={productInfo}
