@@ -7,7 +7,7 @@ interface CheckoutCardProps extends CheckoutItem {
 export default function CheckoutCard({
   id,
   image,
-  title,
+  name,
   price,
   itemQuantity,
   total,
@@ -15,7 +15,7 @@ export default function CheckoutCard({
 }: CheckoutCardProps) {
   return (
     <div className="CheckoutCard">
-      <h2>{title}</h2>
+      <h2>{name}</h2>
       <img src={image} alt="" />
       <p>Price: {price.toFixed(2)}</p>
       <p>Quantity: {itemQuantity}</p>

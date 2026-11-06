@@ -3,11 +3,13 @@ import CheckoutCard from "./CheckoutCard";
 
 interface CheckoutContainerProps {
   checkoutData: CheckoutItem[];
+  handleEmptyCheckout: () => void;
   handleRemoveOneFromCheckout: (id: string) => void;
 }
 
 export default function CheckoutContainer({
   checkoutData,
+  handleEmptyCheckout,
   handleRemoveOneFromCheckout,
 }: CheckoutContainerProps) {
   return (
@@ -22,7 +24,7 @@ export default function CheckoutContainer({
         ))}
       </div>
       <div>
-        <button>Empty Checkout</button>
+        <button onClick={() => handleEmptyCheckout()}>Empty Checkout</button>
         <h2>
           {checkoutData.length > 0
             ? `Total: ${checkoutData.reduce((acc, item) => acc + item.total, 0).toFixed(2)}$`
