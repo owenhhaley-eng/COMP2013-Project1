@@ -40,6 +40,7 @@ export default function ProductCard({
             image,
             name: productInfo.name,
             price: productInfo.price,
+            quantity: productInfo.quantity,
             itemQuantity: productInfo.itemQuantity,
             total: productInfo.itemQuantity * productInfo.price,
           })

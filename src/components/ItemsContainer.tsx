@@ -22,7 +22,7 @@ export default function ItemsContainer({
             {...item}
             productInfo={info}
             handleChangeQuantity={(delta: number) =>
-              handleChangeQuantity(item.id, delta)
+              handleChangeQuantity(item.id, delta, item.quantity)
             }
             handleAddToCheckout={handleAddToCheckout}
           />

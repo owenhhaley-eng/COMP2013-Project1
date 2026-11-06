@@ -21,7 +21,7 @@ export interface ProductInfo {
 export interface ItemsContainerProps {
   data: ClothingProduct[];
   productInfo: ProductInfo[];
-  handleChangeQuantity: (id: number, delta: number) => void;
+  handleChangeQuantity: (id: number, delta: number, quantity: number) => void;
   handleAddToCheckout: (checkoutItem: CheckoutItem) => void;
 }
 
@@ -32,6 +32,7 @@ export interface CheckoutItem {
   image: string;
   name: string;
   price: number;
+  quantity: number;
   itemQuantity: number;
   total: number;
 }
@@ -60,12 +61,19 @@ export default function ThriftHappensApp({ data }: ItemData) {
   //check which id is changing, then change the number according to the delta
   //if delta is +1, add to the quantity
   //else if delta is -1, remove from the quantity
-  //return the max quantity of 0 or a bigger number
+  //return the max quantity of 0 or a bigger number;
+  //I use Math min to make it so it cannot go over the quantity of that specific item.
   function handleChangeQuantity(id: number, delta: number) {
     setProductInfo((prevData) => {
       return prevData.map((info) =>
         info.id === id
-          ? { ...info, itemQuantity: Math.max(info.itemQuantity + delta, 0) }
+          ? {
+              ...info,
+              itemQuantity: Math.min(
+                Math.max(info.itemQuantity + delta, 0),
+                info.quantity,
+              ),
+            }
           : info,
       );
     });
@@ -74,6 +82,28 @@ export default function ThriftHappensApp({ data }: ItemData) {
   //Handler function to add items to the checkout when the user clicks on the button add to checkout
   function handleAddToCheckout(checkoutItem: CheckoutItem) {
     setCheckoutItems((prevItems) => {
+      //Check if the item is already in the checkout
+      const alreadyInCheckout = prevItems.find(
+        (item) => item.id === checkoutItem.id,
+      );
+
+      if (alreadyInCheckout) {
+        return prevItems.map((item) => {
+          if (item.id === checkoutItem.id) {
+            return {
+              ...item,
+              itemQuantity: Math.min(
+                item.itemQuantity + checkoutItem.itemQuantity,
+                item.quantity,
+              ),
+            };
+          }
+          return item;
+        });
+      }
+
+      //Check if the item being added has a quantity of 0 or lower if it does don't add anything to the checkout
+      if (checkoutItem.itemQuantity <= 0) return prevItems;
       return [...prevItems, { ...checkoutItem }];
     });
   }
