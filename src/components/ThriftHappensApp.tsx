@@ -99,18 +99,15 @@ export default function ThriftHappensApp({ data }: ItemData) {
 
       // Check if the item is already in the checkout
       const alreadyInCheckout = prevItems.find(
-        (item) => item.id === checkoutItem.id,
+        (item) => item.productID === checkoutItem.productID,
       );
 
       if (alreadyInCheckout) {
         return prevItems.map((item) => {
-          if (item.id === checkoutItem.id) {
+          if (item.productID === checkoutItem.productID) {
             return {
               ...item,
-              itemQuantity: Math.min(
-                item.itemQuantity + checkoutItem.itemQuantity,
-                item.quantity,
-              ),
+              itemQuantity: item.itemQuantity + checkoutItem.itemQuantity,
             };
           }
           return item;
