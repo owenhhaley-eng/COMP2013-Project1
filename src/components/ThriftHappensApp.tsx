@@ -21,13 +21,14 @@ export interface ProductInfo {
 export interface ItemsContainerProps {
   data: ClothingProduct[];
   productInfo: ProductInfo[];
-  handleChangeQuantity: (id: number, delta: number, quantity: number) => void;
+  handleChangeQuantity: (id: number, delta: number) => void;
   handleAddToCheckout: (checkoutItem: CheckoutItem) => void;
 }
 
 /// I'll need a CheckoutItem interface later on
 
 export interface CheckoutItem {
+  productID: number;
   id: string;
   image: string;
   name: string;
@@ -81,29 +82,41 @@ export default function ThriftHappensApp({ data }: ItemData) {
 
   //Handler function to add items to the checkout when the user clicks on the button add to checkout
   function handleAddToCheckout(checkoutItem: CheckoutItem) {
-    setCheckoutItems((prevItems) => {
-      //Check if the item is already in the checkout
-      const alreadyInCheckout = prevItems.find(
-        (item) => item.id === checkoutItem.id,
+    setProductInfo((prevData) => {
+      return prevData.map((info) =>
+        info.id === checkoutItem.productID
+          ? {
+              ...info,
+              itemQuantity: 0,
+              quantity: Math.max(info.quantity - checkoutItem.itemQuantity, 0),
+            }
+          : info,
       );
-
-      if (alreadyInCheckout) {
-        return prevItems.map((item) => {
-          if (item.id === checkoutItem.id) {
-            return {
-              ...item,
-              itemQuantity: Math.min(
-                item.itemQuantity + checkoutItem.itemQuantity,
-                item.quantity,
-              ),
-            };
-          }
-          return item;
-        });
-      }
-
+    });
+    setCheckoutItems((prevItems) => {
       //Check if the item being added has a quantity of 0 or lower if it does don't add anything to the checkout
       if (checkoutItem.itemQuantity <= 0) return prevItems;
+
+      //Check if the item is already in the checkout
+      // const alreadyInCheckout = prevItems.find(
+      //   (item) => item.id === checkoutItem.id,
+      // );
+
+      // if (alreadyInCheckout) {
+      //   return prevItems.map((item) => {
+      //     if (item.id === checkoutItem.id) {
+      //       return {
+      //         ...item,
+      //         itemQuantity: Math.min(
+      //           item.itemQuantity + checkoutItem.itemQuantity,
+      //           item.quantity,
+      //         ),
+      //       };
+      //     }
+      //     return item;
+      //   });
+      // }
+
       return [...prevItems, { ...checkoutItem }];
     });
   }
@@ -112,7 +125,21 @@ export default function ThriftHappensApp({ data }: ItemData) {
     setCheckoutItems([]);
   }
 
-  function handleRemoveOneFromCheckout(id: string) {
+  function handleRemoveOneFromCheckout(
+    id: string,
+    productID: number,
+    itemQuantity: number,
+  ) {
+    setProductInfo((prevData) => {
+      return prevData.map((info) =>
+        info.id === productID
+          ? {
+              ...info,
+              quantity: info.quantity + itemQuantity,
+            }
+          : info,
+      );
+    });
     setCheckoutItems((prevItems) => {
       return prevItems.filter((item) => item.id !== id);
     });

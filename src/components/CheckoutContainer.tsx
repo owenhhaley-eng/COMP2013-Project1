@@ -4,7 +4,11 @@ import CheckoutCard from "./CheckoutCard";
 interface CheckoutContainerProps {
   checkoutData: CheckoutItem[];
   handleEmptyCheckout: () => void;
-  handleRemoveOneFromCheckout: (id: string) => void;
+  handleRemoveOneFromCheckout: (
+    id: string,
+    productID: number,
+    itemQuantity: number,
+  ) => void;
 }
 
 export default function CheckoutContainer({

@@ -27,7 +27,7 @@ export default function ProductCard({
       <p>Color: {color}</p>
       <p>{description}</p>
       <p>Size: {size}</p>
-      <p>Price: {productInfo.price}</p>
+      <p>Price: {productInfo.price.toFixed(2)}$</p>
       <p>Quantity: {productInfo.quantity}</p>
       <button onClick={() => handleChangeQuantity(-1)}>{" - "}</button>
       <span>{productInfo.itemQuantity}</span>
@@ -36,6 +36,7 @@ export default function ProductCard({
       <button
         onClick={() =>
           handleAddToCheckout({
+            productID: productInfo.id,
             id: crypto.randomUUID(),
             image,
             name: productInfo.name,
