@@ -3,7 +3,7 @@ import CheckoutCard from "./CheckoutCard";
 
 interface CheckoutContainerProps {
   checkoutData: CheckoutItem[];
-  handleEmptyCheckout: () => void;
+  handleEmptyCheckout: (checkoutData: CheckoutItem[]) => void;
   handleRemoveOneFromCheckout: (
     id: string,
     productID: number,
@@ -28,7 +28,9 @@ export default function CheckoutContainer({
         ))}
       </div>
       <div>
-        <button onClick={() => handleEmptyCheckout()}>Empty Checkout</button>
+        <button onClick={() => handleEmptyCheckout(checkoutData)}>
+          Empty Checkout
+        </button>
         <h2>
           {checkoutData.length > 0
             ? `Total: ${checkoutData.reduce((acc, item) => acc + item.total, 0).toFixed(2)}$`

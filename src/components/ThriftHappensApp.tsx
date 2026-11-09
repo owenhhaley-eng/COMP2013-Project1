@@ -97,32 +97,38 @@ export default function ThriftHappensApp({ data }: ItemData) {
       //Check if the item being added has a quantity of 0 or lower if it does don't add anything to the checkout
       if (checkoutItem.itemQuantity <= 0) return prevItems;
 
-      //Check if the item is already in the checkout
-      // const alreadyInCheckout = prevItems.find(
-      //   (item) => item.id === checkoutItem.id,
-      // );
+      // Check if the item is already in the checkout
+      const alreadyInCheckout = prevItems.find(
+        (item) => item.id === checkoutItem.id,
+      );
 
-      // if (alreadyInCheckout) {
-      //   return prevItems.map((item) => {
-      //     if (item.id === checkoutItem.id) {
-      //       return {
-      //         ...item,
-      //         itemQuantity: Math.min(
-      //           item.itemQuantity + checkoutItem.itemQuantity,
-      //           item.quantity,
-      //         ),
-      //       };
-      //     }
-      //     return item;
-      //   });
-      // }
+      if (alreadyInCheckout) {
+        return prevItems.map((item) => {
+          if (item.id === checkoutItem.id) {
+            return {
+              ...item,
+              itemQuantity: Math.min(
+                item.itemQuantity + checkoutItem.itemQuantity,
+                item.quantity,
+              ),
+            };
+          }
+          return item;
+        });
+      }
 
       return [...prevItems, { ...checkoutItem }];
     });
   }
 
-  function handleEmptyCheckout() {
-    setCheckoutItems([]);
+  function handleEmptyCheckout(checkoutData: CheckoutItem[]) {
+    for (let i = 0; i < checkoutData.length; i++) {
+      handleRemoveOneFromCheckout(
+        checkoutData[i].id,
+        checkoutData[i].productID,
+        checkoutData[i].itemQuantity,
+      );
+    }
   }
 
   function handleRemoveOneFromCheckout(

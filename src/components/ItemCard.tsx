@@ -47,7 +47,7 @@ export default function ProductCard({
           })
         }
       >
-        Add to Checkout
+        {productInfo.quantity === 0 ? "Out Of Stock" : "Add to Checkout"}
       </button>
     </div>
   );
